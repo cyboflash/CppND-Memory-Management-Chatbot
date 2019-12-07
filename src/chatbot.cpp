@@ -18,7 +18,7 @@ ChatBot::ChatBot()
 }
 
 // constructor WITH memory allocation
-ChatBot::ChatBot(std::string filename)
+ChatBot::ChatBot(std::string filename) : filename{filename}
 {
     std::cout << "ChatBot Constructor" << std::endl;
     
@@ -28,26 +28,6 @@ ChatBot::ChatBot(std::string filename)
 
     // load image into heap memory
     _image = new wxBitmap(filename, wxBITMAP_TYPE_PNG);
-}
-
-ChatBot::ChatBot(const ChatBot& source)
-{
-    std::cout << "ChatBot Copy c'tor" << std::endl;
-    if (nullptr != _image)
-    {
-        delete _image;
-    }
-    _image = source._image;
-    std::cout << "    copy: " << &_image << std::endl;
-    std::cout << "original: " << &source._image << std::endl;
-
-    _chatLogic = source._chatLogic;
-    _rootNode = source._rootNode;
-}
-
-ChatBot &operator=(const ChatBot& source)
-{
-
 }
 
 ChatBot::~ChatBot()
@@ -64,6 +44,46 @@ ChatBot::~ChatBot()
 
 //// STUDENT CODE
 ////
+
+std::string ChatBot::getFilename() const
+{ 
+    return filename;
+}
+
+// Copy constructor
+ChatBot::ChatBot(const ChatBot& source)
+{
+    std::cout << "ChatBot Copy Constructor" << std::endl;
+    
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+    _currentNode = source._currentNode;
+
+    filename = source.getFilename();
+
+    // load image into heap memory
+    _image = new wxBitmap(filename, wxBITMAP_TYPE_PNG);
+}
+
+// Copy assign constructor
+ChatBot& ChatBot::operator=(const ChatBot& source)
+{
+    std::cout << "ChatBot Copy Assign Constructor" << std::endl;
+    
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+    _currentNode = source._currentNode;
+    filename = source.getFilename();
+
+    if (NULL == _image)
+    {
+        delete _image;
+    }
+
+    // load image into heap memory
+    _image = new wxBitmap(filename, wxBITMAP_TYPE_PNG);
+    return *this;
+}
 
 ////
 //// EOF STUDENT CODE
