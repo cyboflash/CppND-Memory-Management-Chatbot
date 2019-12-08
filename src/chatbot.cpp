@@ -18,7 +18,7 @@ ChatBot::ChatBot()
 }
 
 // constructor WITH memory allocation
-ChatBot::ChatBot(std::string filename) : filename{filename}
+ChatBot::ChatBot(std::string filename)
 {
     std::cout << "ChatBot Constructor" << std::endl;
     
@@ -45,11 +45,6 @@ ChatBot::~ChatBot()
 //// STUDENT CODE
 ////
 
-std::string ChatBot::getFilename() const
-{ 
-    return filename;
-}
-
 // Copy constructor
 ChatBot::ChatBot(const ChatBot& source)
 {
@@ -59,21 +54,23 @@ ChatBot::ChatBot(const ChatBot& source)
     _rootNode = source._rootNode;
     _currentNode = source._currentNode;
 
-    filename = source.getFilename();
-
     // load image into heap memory
-    _image = new wxBitmap(filename, wxBITMAP_TYPE_PNG);
+    _image = new wxBitmap(*(source._image));
 }
 
-// Copy assign constructor
+// Assignment operator
 ChatBot& ChatBot::operator=(const ChatBot& source)
 {
-    std::cout << "ChatBot Copy Assign Constructor" << std::endl;
+    std::cout << "ChatBot Copy Assignment operator" << std::endl;
+
+    if (this == &source)
+    {
+        return *this;
+    }
     
     _chatLogic = source._chatLogic;
     _rootNode = source._rootNode;
     _currentNode = source._currentNode;
-    filename = source.getFilename();
 
     if (NULL == _image)
     {
@@ -81,9 +78,54 @@ ChatBot& ChatBot::operator=(const ChatBot& source)
     }
 
     // load image into heap memory
-    _image = new wxBitmap(filename, wxBITMAP_TYPE_PNG);
+    _image = new wxBitmap(*(source._image));
     return *this;
 }
+
+// Move constructor
+ChatBot::ChatBot(ChatBot&& source)
+{
+    std::cout << "ChatBot Move Constructor" << std::endl;
+    
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+    _currentNode = source._currentNode;
+
+    source._chatLogic = nullptr;
+    source._rootNode = nullptr;
+    source._currentNode = nullptr;
+
+
+    _image = source._image;
+    source._image = NULL;
+}
+
+// Move assign operator
+ChatBot& ChatBot::operator=(ChatBot&& source)
+{
+    std::cout << "ChatBot Move Assign operator" << std::endl;
+
+    if (this == &source)
+    {
+        return *this;
+    }
+
+    _chatLogic = source._chatLogic;
+    _rootNode = source._rootNode;
+    _currentNode = source._currentNode;
+
+    source._chatLogic = nullptr;
+    source._rootNode = nullptr;
+    source._currentNode = nullptr;
+
+    // load image into heap memory
+    _image = source._image;
+    source._image = NULL;
+
+    return *this;
+}
+
+
 
 ////
 //// EOF STUDENT CODE
