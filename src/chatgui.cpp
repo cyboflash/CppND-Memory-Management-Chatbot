@@ -13,6 +13,7 @@ const int height = 736;
 // wxWidgets APP
 IMPLEMENT_APP(ChatBotApp);
 
+// Test Code
 // int main()
 // {
 //     ChatBot bot("../images/chatbot.png");
